@@ -1,0 +1,104 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+local Window = OrionLib:MakeWindow({Name = "Board Smash", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+
+local Main = Window:MakeTab({
+    Name = "Main Farm",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+local autoClicking = false
+
+Main:AddButton({
+    Name = "Auto Click",
+    Callback = function()
+        autoClicking = not autoClicking
+        if autoClicking then
+            print("Auto Click Enabled")
+            while autoClicking do
+                local args = {
+                    [1] = "Click"
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Click"):FireServer(unpack(args))
+                wait(0.1) -- Adjust wait time as necessary
+            end
+        else
+            print("Auto Click Disabled")
+        end
+    end    
+})
+
+Main:AddToggle({
+    Name = "[UPGRADE] Strength",
+    Default = false,
+    Callback = function(Value)
+        local args = {
+            [1] = "Strength"
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Upgrades"):FireServer(unpack(args))
+        print("Strength Upgrade:", Value)
+    end    
+})
+
+Main:AddToggle({
+    Name = "[UPGRADE] Luck",
+    Default = false,
+    Callback = function(Value)
+        local args = {
+            [1] = "Luck"
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Upgrades"):FireServer(unpack(args))
+        print("Luck Upgrade:", Value)
+    end    
+})
+
+Main:AddToggle({
+    Name = "[UPGRADE] Health",
+    Default = false,
+    Callback = function(Value)
+        local args = {
+            [1] = "Health"
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Upgrades"):FireServer(unpack(args))
+        print("Health Upgrade:", Value)
+    end    
+})
+
+Main:AddToggle({
+	Name = "Auto Rebirth",
+	Default = false,
+	Callback = function(Value)
+	local args = {
+    [1] = "Rebirth"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Rebirth"):FireServer(unpack(args))
+		print(Value)
+	end    
+})
+
+local Tab = Window:MakeTab({
+	Name = "Random",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+Main:AddSlider({
+    Name = "WalkSpeed",
+    Min = 10,
+    Max = 500,
+    Default = 16,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 1,
+    ValueName = "WalkSpeed",
+    Callback = function(Value)
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.WalkSpeed = Value
+            print("WalkSpeed set to:", Value)
+        else
+            print("Character or Humanoid not found!")
+        end
+    end    
+})
